@@ -16,10 +16,75 @@ void setup()
   SetupIO();
 
   Serial.begin(115200);
+
+  pinMode(BUTTON_ONE, INPUT_PULLUP);
+  pinMode(BUTTON_TWO, INPUT_PULLUP);
+
+  Serial.print("EL Sequencer Start\n");
+  //All off
+  AllOff();
+
  }
 
 void loop() 
 {
-  NextSequence(); //Run the sequence
-  delay(200); //How long till we change patterns
+  static int state = 0;
+
+  switch(state)
+  {
+    case 0:
+    {
+      //if button one pressed while in default case
+      //we come back here.
+      //So wait for user to release the button
+      //before waiting for waiting for next button press
+      while(digitalRead(BUTTON_ONE) == LOW);
+
+      Serial.print("Button Not pressed 0\n");
+      
+      state++;
+    }
+    break;
+
+    case 1:
+    {
+      //wait for button press
+      while(digitalRead(BUTTON_ONE) == HIGH);
+
+      Serial.print("Button pressed 1\n");
+
+      //all on
+      AllOn();
+
+      state++;
+    }
+    break;
+
+    case 2:
+    {
+      while(digitalRead(BUTTON_TWO) == HIGH);
+
+      Serial.print("Button pressed 2\n");
+
+      AllOff();
+
+      delay(1000);
+      state++; //run default case after this
+    }
+    break;
+
+    default:
+    {
+      NextSequence(); //Run the sequence
+      delay(200); //How long till we change patterns
+
+      Serial.print("ee Seq\n");
+
+      if(digitalRead(BUTTON_ONE) == LOW)
+      {
+        state = 0;
+      }
+    }
+
+  }
 }

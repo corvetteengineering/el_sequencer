@@ -6,6 +6,7 @@ A sequence can have up to 255 patterns since we use a uint8_t to count which pat
 The reason to use multiple sequences is so you can use the same sequence
  more than once, otherwise just make one big pattern
 */
+//85 rows max per sequence, due to using a uint8_t for array size
 static uint8_t SequenceStartup[][3] =
 {
   {0,0,0},

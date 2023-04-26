@@ -4,7 +4,6 @@
 #include "sequencer.h"
 #include "sequences.h"
 
-static uint8_t Step = 0;
 static uint8_t thisseq = 0;
 
 //this array maps the Arduino pins to the EL sequencer channels
@@ -25,7 +24,7 @@ void SetupIO()
 }
 
 //Writes all 24 channels of a pattern too the IO
-static void SetPattern(const SequenceStruct_t *seq, int step)
+static void SetPattern(const SequenceStruct_t *seq, uint16_t step)
 {
   uint32_t pat = ((uint32_t)(seq->data[step]) <<16 | ((uint32_t)(seq->data[step+1])<<8) | (uint32_t)(seq->data[step+2]) );
 
@@ -42,6 +41,9 @@ Runs the sequences in the order listed in the Sequence sarray in sequences.h
 bool NextSequence()
 {
   bool ret = true;
+  static uint8_t Step = 0;
+
+  //
 
   SetPattern(&Sequences[thisseq], Step);
   Step += 3;
@@ -58,4 +60,20 @@ bool NextSequence()
     }
   }
   return ret;
+}
+
+void AllOff(void)
+{
+  for(int i=0; i<24; i++)
+  {
+    digitalWrite(ELPinMap[i], 1);
+  }
+}
+
+void AllOn(void)
+{
+  for(int i=0; i<24; i++)
+  {
+    digitalWrite(ELPinMap[i], 0);
+  }
 }
