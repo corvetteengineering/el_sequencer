@@ -7,11 +7,12 @@
 static uint8_t thisseq = 0;
 
 //this array maps the Arduino pins to the EL sequencer channels
-static uint8_t ELPinMap[24] = 
+static uint8_t ELPinMap[] = 
 {
-//PORT A                    //PORT B                 //port C    //PORT D
-//0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,11,12,13,14,15,16,17,18,19,20,21,22,23  (EL outputs)
-  24,25,26,27,28,29,30,31,0, 1, 2, 3, 4, 5, 6, 7, 16,17,22,23,10,11,12,13  //Arduino pin numbers
+//PORT D       port C       PORT A        PORT B                   port A    
+//4, 5, 6, 7,  0, 1, 6, 7   7, 6, 5, 4    7, 6, 5, 4, 3, 2, 1, 0   0, 1, 2, 3   port pins
+//1, 2, 3, 4,  5, 6, 7, 8,  9, 10,11,12,  13,14,15,16,17,18,19,20, 21,22,23,24  EL outputs
+  12,13,14,15, 16,17,22,23, 31,30,29,28,  0, 1, 2, 3, 4, 5, 6, 7,  24,25,26,27  //Arduino pin numbers
 };
 
 //setup the IO for the sequencer
@@ -20,7 +21,7 @@ void SetupIO()
   DDRA = 0xFF;
   DDRB = 0xFF;
   DDRC = B11000011;
-  DDRD = B00111100;
+  DDRD = 0xF0; //B11110000;
 }
 
 //Writes all 24 channels of a pattern too the IO
@@ -66,7 +67,7 @@ void AllOff(void)
 {
   for(int i=0; i<24; i++)
   {
-    digitalWrite(ELPinMap[i], 1);
+    digitalWrite(ELPinMap[i], 0);
   }
 }
 
@@ -74,6 +75,6 @@ void AllOn(void)
 {
   for(int i=0; i<24; i++)
   {
-    digitalWrite(ELPinMap[i], 0);
+    digitalWrite(ELPinMap[i], 1);
   }
 }

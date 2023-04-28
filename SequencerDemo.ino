@@ -21,8 +21,9 @@ void setup()
   pinMode(BUTTON_TWO, INPUT_PULLUP);
 
   Serial.print("EL Sequencer Start\n");
-  //All off
-  AllOff();
+
+  //all on
+  AllOn();
 
  }
 
@@ -53,8 +54,7 @@ void loop()
 
       Serial.print("Button pressed 1\n");
 
-      //all on
-      AllOn();
+      AllOff();
 
       state++;
     }
@@ -66,7 +66,7 @@ void loop()
 
       Serial.print("Button pressed 2\n");
 
-      AllOff();
+      AllOn();
 
       delay(1000);
       state++; //run default case after this
